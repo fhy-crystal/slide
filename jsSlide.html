@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {box-sizing: border-box; } 
+        a {text-decoration: none; } 
+        ul,ol,li{list-style: none; margin: 0; padding: 0; } 
+        #slider{width: 800px; height: 300px; overflow: hidden; position: relative; margin: 0 auto; } 
+        #slider ul{width: 2400px; position: relative; } 
+        #slider ul:after{content: " "; width: 0; height: 0; display: block; } 
+        #slider ul li{float: left; width: 800px; height: 300px; overflow: hidden; } 
+        #slider ul li img{width: 100%; } 
+        #slider ol{position: absolute; bottom: 10px; left: 46%; } 
+        #slider ol li{display: inline-block; } 
+        #slider ol li a{display: inline-block; padding:4px 8px; border-radius:15px; background-color: #000; color: #fff; } 
+        #slider ol li a.active{background-color: #ffffff; color: #ff0000; }
+        #slider .prev, #slider .next{display: inline-block; position: absolute; top: 49%; background-color: #000; opacity: 0.6; color: #fff; padding: 3px; } 
+        #slider .prev{left: 10px; } 
+        #slider .next{right: 10px; } 
+
+    </style>
+</head>
+<body>
+    
+   <div id="slider">
+        <ul>
+            <li> <img src="./img/banner1.jpg" /> </li>
+            <li> <img src="./img/banner2.jpg" /> </li>
+            <li> <img src="./img/banner3.jpg" /> </li>
+        </ul>
+        <ol>
+            <li> <a href="#">1</a> </li>
+            <li> <a href="#">2</a> </li>
+            <li> <a href="#">3</a> </li>
+        </ol>
+        <a href="#" class="prev">上一张</a>
+        <a href="#" class="next">下一张</a>
+   </div>
+</body>
+
+<script>
+      (function(){
+        //图片节点
+        var slider = document.getElementById("slider");
+        var imgul = slider.getElementsByTagName("ul")[0];
+        var imglis = imgul.getElementsByTagName("li");
+        var len = imglis.length;
+
+        //图片序列节点
+        var numol = slider.getElementsByTagName("ol")[0];
+        var numlinks = numol.getElementsByTagName("a");
+
+        //共享序列
+        var index = 0;
+
+        //图片跳转,图片跳转的同时,改变序列节点的跳转
+        var jump = function () {
+            return setInterval(function(){
+
+                if(index >= len){
+                    index = 0;
+                }
+
+                //图片跳转
+                imgul.style.left = - (800 * index) + "px";
+
+                //改变序列节点样式:首先要清除所有的链接的样式,然后在激活对应的序列节点样式
+                for (var i = 0; i < len; i++) {
+                    numlinks[i].setAttribute("class","");
+                }
+                numlinks[index].setAttribute("class","active");
+
+                index++;
+
+            },2000);
+        };
+        var jumpindex = jump();
+        for (var i = 0; i < len; i++){
+
+        //hover
+        numlinks[i].onmouseover = function () {
+            clearInterval(jumpindex);
+
+            for (var i = 0; i < len; i++) {
+                numlinks[i].setAttribute("class","");
+                if (numlinks[i] === this){
+                    index = i;
+                }
+            }
+            imgul.style.left = - (800 * index) + "px";
+            numlinks[index].setAttribute("class","active");
+        }
+
+        //out
+        numlinks[i].onmouseout = function(){
+            jumpindex = jump();
+        }
+    }
+        var prev = slider.getElementsByClassName("prev")[0];
+        var next = slider.getElementsByClassName("next")[0];
+
+        prev.onclick = function () {
+            clearInterval(jumpindex);
+            index--;
+            if (index < 0 ) {
+                index = len - 1 ;
+            }
+            console.log( index )
+            imgul.style.left = - (800 * index) + "px";
+            for (var i = 0; i < len; i++) {
+                numlinks[i].setAttribute("class","");
+            }
+            numlinks[index].setAttribute("class","active");
+        }
+
+        prev.onmouseout = function () {
+            clearInterval(jumpindex);
+            jumpindex = jump();
+        }
+
+        next.onclick = function () {
+            clearInterval(jumpindex);
+            index++;
+            if (index >= len) {
+                index = 0;
+            }
+            imgul.style.left = - (800 * index) + "px";
+            for (var i = 0; i < len; i++) {
+              numlinks[i].setAttribute("class","");
+            }
+            numlinks[index].setAttribute("class","active");
+
+
+        }
+
+        next.onmouseout = function () {
+            clearInterval(jumpindex);
+            jumpindex = jump();
+        }
+        
+      })();
+  </script>
+
+</html>

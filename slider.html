@@ -1,0 +1,65 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="./css/normalize3.0.2.css">
+	<link rel="stylesheet" type="text/css" href="./css/index.css">
+</head>
+<body>
+	<div class="banner relative">
+		<ul id="banner_img">
+			<li class="item1 show"></li>
+			<li class="item2"></li>
+			<li class="item3"></li>
+			<div class="clear"></div>
+		</ul>
+		<ul id="banner_num">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<div class="clear"></div>
+		</ul>
+	</div>
+	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript">
+	var images = document.getElementById("banner_img").getElementsByTagName("li");
+	var nums = document.getElementById("banner_num").getElementsByTagName("li");
+	var slide = null;
+	var cur = 0;
+
+	// 	window.onload = function(){
+	
+	// 	var images = document.getElementById("banner_img").getElementsByTagName('li');
+	// 	var pos = 0;
+	// 	var len = images.length;
+		
+	// 	var dt = setInterval(function(){
+		
+	// 		images[pos].style.display = 'none';
+	// 		pos = ++pos == len ? 0 : pos;
+	// 		images[pos].style.display = 'inline';
+		
+	// 	},2000);
+	// };
+	function changeTo(cur){
+		$('#banner_img').find('li').removeClass('show').hide().eq(cur).fadeIn('slow', function() {
+			$(this).addClass('show');
+		});
+		$('#banner_num').find('li').removeClass('active').eq(cur).addClass('active');
+	}
+	function autoChange(){
+		slide = setInterval(function(){
+			// images[cur].style.display = "none";
+			changeTo(cur)
+			cur++;
+			if(cur == images.length)
+			{
+				cur = 0;
+			}
+			changeTo(cur);
+		},4000);
+	}
+	autoChange();
+	</script>
+</body>
+</html>
